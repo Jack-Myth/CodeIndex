@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -26,7 +27,7 @@ namespace CodeIndex.VisualStudioExtension
             {
                 TextBox_KeyDown(sender, e);
             }
-            else
+            else if (e.Key != Key.Up&& e.Key != Key.Down&& e.Key != Key.Left&& e.Key != Key.Right)
             {
                 SearchViewModel?.GetHintWordsAsync();
             }
@@ -39,28 +40,10 @@ namespace CodeIndex.VisualStudioExtension
                 if (e.KeyboardDevice.Modifiers != ModifierKeys.Control)
                 {
                     SearchButton.Command?.Execute(null);
+                    SearchButton.Focus();
                 }
             }
-            else if (this.ContentComboBox.Items.Count > 0)
-            {
-                if (e.Key == Key.Down)
-                {
-                    if (this.ContentComboBox.SelectedIndex < 0)
-                    {
-                        this.ContentComboBox.SelectedIndex = 0;
-                    }
-                    this.ContentComboBox.SelectedIndex = (this.ContentComboBox.SelectedIndex + 1) % this.ContentComboBox.Items.Count;
-                }
-                else if (e.Key == Key.Up)
-                {
-                    if (this.ContentComboBox.SelectedIndex < 0)
-                    {
-                        this.ContentComboBox.SelectedIndex = 0;
-                    }
-                    this.ContentComboBox.SelectedIndex = (this.ContentComboBox.SelectedIndex + this.ContentComboBox.Items.Count - 1) % this.ContentComboBox.Items.Count;
-                }
-            }
-            if (this.ContentComboBox.Items.Count > 0)
+            else
             {
                 this.ContentComboBox.IsDropDownOpen = true;
             }
@@ -70,7 +53,7 @@ namespace CodeIndex.VisualStudioExtension
 
         private bool ShouldOpenHintList
         {
-            get => ContentComboBox.IsFocused && !ContentComboBox.Items.IsEmpty;
+            get => ContentComboBox.IsFocused;
         }
 
         void Row_DoubleClick(object sender, MouseButtonEventArgs e)
@@ -97,14 +80,9 @@ namespace CodeIndex.VisualStudioExtension
             }
         }
 
-        private void ContentTextBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ContentComboBox_GotFocus(object sender, System.Windows.RoutedEventArgs e)
         {
-            var NewSelectItem = (sender as ComboBox).SelectedItem;
-            if (NewSelectItem != null)
-            {
-                SearchViewModel.Content = (NewSelectItem as Models.HintWord).Word;
-            }
-            e.Handled = true;
+            ContentComboBox.IsDropDownOpen = true;
         }
     }
 }

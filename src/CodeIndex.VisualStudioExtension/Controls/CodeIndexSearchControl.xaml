@@ -15,22 +15,18 @@
                     <Label Content="Content:"/>
                     <ComboBox x:Name="ContentComboBox" Height="23" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Width="240" 
                               KeyUp="ContentTextBox_KeyUp" 
-                              SelectionChanged="ContentTextBox_SelectionChanged"
-                              IsDropDownOpen="{Binding ShouldOpenHintList, Mode=OneWay}"
+                              GotFocus="ContentComboBox_GotFocus"
                               IsEditable="True" 
                               StaysOpenOnEdit="True"
-                              ItemsSource="{Binding HintWords}" >
+                              MaxWidth="150"
+                              ItemsSource="{Binding HintWords, Converter={StaticResource HintWordConverter}}" IsTextSearchEnabled="False" >
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
                                 <Setter Property="Background" Value="#FF2D2D30"/>
                                 <Setter Property="BorderBrush" Value="#FF2D2D30"/>
+                                <Setter Property="Foreground" Value="#FFFFFFFF"/>
                             </Style>
                         </ComboBox.ItemContainerStyle>
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <ComboBoxItem Content="{Binding Word}"   />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
                     </ComboBox>
                 </DockPanel>
                 <CheckBox Content=":Case Sensitive" Style="{StaticResource CommonCheckBox}" IsChecked="{Binding CaseSensitive}"/>

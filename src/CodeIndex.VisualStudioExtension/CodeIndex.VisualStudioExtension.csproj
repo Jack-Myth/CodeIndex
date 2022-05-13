@@ -67,6 +67,7 @@
     <Compile Include="CodeIndexSearchWindowControl.xaml.cs">
       <DependentUpon>CodeIndexSearchWindowControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converts\HintWordConverter.cs" />
     <Compile Include="Converts\StringToXamlConverter.cs" />
     <Compile Include="Models\BaseViewModel.cs" />
     <Compile Include="Models\CodeIndexSearchViewModel.cs" />
