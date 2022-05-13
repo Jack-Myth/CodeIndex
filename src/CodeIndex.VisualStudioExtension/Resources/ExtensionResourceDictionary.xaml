@@ -10,6 +10,11 @@
         <Setter Property="Background" Value="#FF434343"/>
         <Setter Property="Foreground" Value="White"/>
     </Style>
+    <Style TargetType="{x:Type ComboBox}" x:Key="CommonComboBox">
+        <Style.Resources>
+            <SolidColorBrush x:Key="TextBox.Static.Background" Color="#FF2D2D30"/>
+        </Style.Resources>
+    </Style>
     <Style TargetType="{x:Type DataGridRow}" x:Key="BaseGridStyle">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Background" Value="#FF2D2D30"/>
@@ -39,6 +44,8 @@
             <Style TargetType="{x:Type Label}" BasedOn="{StaticResource CommonLabel}">
             </Style>
             <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource CommonTextBox}">
+            </Style>
+            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource CommonComboBox}">
             </Style>
         </Style.Resources>
     </Style>

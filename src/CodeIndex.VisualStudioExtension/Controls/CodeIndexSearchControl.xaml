@@ -13,7 +13,25 @@
             <WrapPanel HorizontalAlignment="Left" DockPanel.Dock="Top">
                 <DockPanel Style="{StaticResource PanelForWrapPanel}">
                     <Label Content="Content:"/>
-                    <TextBox Height="23" TextWrapping="Wrap" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Width="240" KeyUp="ContentTextBox_KeyUp" MaxLength="1000" />
+                    <ComboBox x:Name="ContentComboBox" Height="23" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Width="240" 
+                              KeyUp="ContentTextBox_KeyUp" 
+                              SelectionChanged="ContentTextBox_SelectionChanged"
+                              IsDropDownOpen="{Binding ShouldOpenHintList, Mode=OneWay}"
+                              IsEditable="True" 
+                              StaysOpenOnEdit="True"
+                              ItemsSource="{Binding HintWords}" >
+                        <ComboBox.ItemContainerStyle>
+                            <Style TargetType="ComboBoxItem">
+                                <Setter Property="Background" Value="#FF2D2D30"/>
+                                <Setter Property="BorderBrush" Value="#FF2D2D30"/>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <ComboBoxItem Content="{Binding Word}"   />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </DockPanel>
                 <CheckBox Content=":Case Sensitive" Style="{StaticResource CommonCheckBox}" IsChecked="{Binding CaseSensitive}"/>
                 <CheckBox Content=":Phase Query"  Style="{StaticResource CommonCheckBox}" IsChecked="{Binding PhaseQuery}"/>
@@ -58,7 +76,7 @@
                     <Label Content="{Binding ResultInfo}" Foreground="Yellow" Style="{StaticResource CommonLabel}"/>
                 </ScrollViewer>
             </Grid>
-            <DockPanel DockPanel.Dock="Top">
+            <DockPanel DockPanel.Dock="Top" Visibility="Collapsed">
                 <Label Content="Hind Words:" Style="{StaticResource CommonLabel}" DockPanel.Dock="Left" />
                 <ScrollViewer DockPanel.Dock="Right" VerticalScrollBarVisibility="Auto" MaxHeight="60">
                     <ItemsControl ItemsSource="{Binding HintWords}" ItemsPanel="{StaticResource ItemsPanelTemplateHorizontal}" HorizontalAlignment="Left">

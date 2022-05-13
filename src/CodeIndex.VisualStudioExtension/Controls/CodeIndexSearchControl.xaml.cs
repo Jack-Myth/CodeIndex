@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.ComponentModel;
+using System.IO;
 using System.Windows.Controls;
 using System.Windows.Input;
 using EnvDTE;
@@ -12,6 +14,7 @@ namespace CodeIndex.VisualStudioExtension
     [ProvideToolboxControl("CodeIndex.VisualStudioExtension.CodeIndexSearchControl", true)]
     public partial class CodeIndexSearchControl : UserControl
     {
+
         public CodeIndexSearchControl()
         {
             InitializeComponent();
@@ -38,9 +41,37 @@ namespace CodeIndex.VisualStudioExtension
                     SearchButton.Command?.Execute(null);
                 }
             }
+            else if (this.ContentComboBox.Items.Count > 0)
+            {
+                if (e.Key == Key.Down)
+                {
+                    if (this.ContentComboBox.SelectedIndex < 0)
+                    {
+                        this.ContentComboBox.SelectedIndex = 0;
+                    }
+                    this.ContentComboBox.SelectedIndex = (this.ContentComboBox.SelectedIndex + 1) % this.ContentComboBox.Items.Count;
+                }
+                else if (e.Key == Key.Up)
+                {
+                    if (this.ContentComboBox.SelectedIndex < 0)
+                    {
+                        this.ContentComboBox.SelectedIndex = 0;
+                    }
+                    this.ContentComboBox.SelectedIndex = (this.ContentComboBox.SelectedIndex + this.ContentComboBox.Items.Count - 1) % this.ContentComboBox.Items.Count;
+                }
+            }
+            if (this.ContentComboBox.Items.Count > 0)
+            {
+                this.ContentComboBox.IsDropDownOpen = true;
+            }
         }
 
         CodeIndexSearchViewModel SearchViewModel => DataContext as CodeIndexSearchViewModel;
+
+        private bool ShouldOpenHintList
+        {
+            get => ContentComboBox.IsFocused && !ContentComboBox.Items.IsEmpty;
+        }
 
         void Row_DoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -64,6 +95,16 @@ namespace CodeIndex.VisualStudioExtension
                     }
                 }
             }
+        }
+
+        private void ContentTextBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var NewSelectItem = (sender as ComboBox).SelectedItem;
+            if (NewSelectItem != null)
+            {
+                SearchViewModel.Content = (NewSelectItem as Models.HintWord).Word;
+            }
+            e.Handled = true;
         }
     }
 }
